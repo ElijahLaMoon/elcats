@@ -11,6 +11,13 @@ object Printable {
   def print[A](value: A)(implicit p: Printable[A]) = println(p.format(value))
 }
 
+object PrintableSyntax {
+  implicit class PrintableOps[A](value: A) {
+    def format(implicit p: Printable[A]): String = p.format(value)
+    def print(implicit p: Printable[A]): Unit = println(p.format(value))
+  }
+}
+
 object PrintableInstances {
   implicit val printableString: Printable[String] = 
     new Printable[String] {
@@ -32,5 +39,10 @@ object PrintableMain extends App {
     }
 
     val cat = Cat("Murchyk", 8, "grey")
+    print("cat printed with interface object: ")
     Printable.print(cat)
+
+    print("cat printed with interface syntax: ")
+    import PrintableSyntax._
+    cat.print
 }
