@@ -21,7 +21,7 @@ object PrintableSyntax {
 object PrintableInstances {
   implicit val printableString: Printable[String] = 
     new Printable[String] {
-      def format(value: String): String = value.toString
+      def format(value: String): String = value
     }
 
   implicit val printableInt: Printable[Int] = 
@@ -35,7 +35,14 @@ object PrintableMain extends App {
 
   implicit val printableCat: Printable[Cat] = 
     new Printable[Cat] {
-      def format(value: Cat): String = s"${value.name} is a ${value.age} year-old ${value.color} cat."
+      import PrintableInstances._
+
+      def format(value: Cat): String = {
+        val name = Printable.format(value.name)
+        val age = Printable.format(value.age)
+        val color = Printable.format(value.color)
+        s"$name is a $age year-old $color cat."
+      }
     }
 
     val cat = Cat("Murchyk", 8, "grey")
