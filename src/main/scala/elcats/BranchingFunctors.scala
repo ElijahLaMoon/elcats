@@ -8,7 +8,7 @@ trait Functor[F[_]] {
   def map[A, B](fa: F[A])(f: A => B): F[B]
 }
 
-object Functor {
+object FunctorSyntax {
   implicit class FunctorOps[F[_], A](src: F[A]) {
     def map[B](func: A => B)(implicit functor: Functor[F]): F[B] =
       functor.map(src)(func)
@@ -16,7 +16,7 @@ object Functor {
 }
 
 object BranchingFunctorsMain extends App {
-  import Functor._
+  import FunctorSyntax._
 
   implicit val treeFunctor: Functor[Tree] = 
     new Functor[Tree] {
